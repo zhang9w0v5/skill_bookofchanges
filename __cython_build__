@@ -1,0 +1,24 @@
+# -*- -*- -*- -*- -*- -*- -*-
+# 2023/03    zhang9w0v5    created
+# 2024/04    zhang9w0v5    upgrade
+# -*- -*- -*- -*- -*- -*- -*-
+
+cur_dir=$(dirname $0)
+cd $cur_dir
+echo $cur_dir
+
+# -*-
+
+release_dir=lib
+rm -r $release_dir
+mkdir $release_dir
+
+# -*-
+
+python3 __cython_setup__.py build_ext --inplace
+rm -r build
+rm -f *.c
+
+# -*-
+
+mv -f *.so $release_dir

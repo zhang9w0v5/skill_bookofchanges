@@ -1,0 +1,10 @@
+# -*- -*- -*- -*- -*- -*-
+# 2023/03    zhang9w0v5    created
+# 2024/04    zhang9w0v5    upgrade
+# -*- -*- -*- -*- -*- -*-
+cur_dir=$(dirname $0)
+cd $cur_dir
+echo $cur_dir
+# -*-
+python3 bookofchanges.py
+# -*-

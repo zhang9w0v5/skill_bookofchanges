@@ -1,0 +1,7 @@
+# folder
+.DS_Store
+__pycache__
+output
+
+# files
+*.py[cod]

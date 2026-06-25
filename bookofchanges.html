@@ -1,0 +1,2796 @@
+<!--
+2026/01    zhang9w0v5    基于大语言模型创建
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>易经卜卦</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+/* 易经金钱卦系统样式 */
+
+:root {
+    --primary-color: #8b4513;
+    --primary-dark: #654321;
+    --secondary-color: #d2691e;
+    --accent-color: #ffd700;
+    --light-bg: #f5f0e6;
+    --dark-bg: #2c1810;
+    --text-light: #f5f0e6;
+    --text-dark: #333333;
+    --border-color: #c9a87a;
+    --success-color: #2e8b57;
+    --error-color: #b22222;
+    --shadow: 0 4px 12px rgba(139, 69, 19, 0.15);
+    --radius: 12px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', 'SimHei', sans-serif;
+    background-color: var(--light-bg);
+    color: var(--text-dark);
+    line-height: 1.6;
+
+}
+
+.container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+/* 简介区域 */
+.intro-section {
+    margin-bottom: 20px;
+}
+
+.intro-card {
+    background-color: white;
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+}
+
+.intro-card h2 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+}
+
+.intro-card h2 i {
+    margin-right: 10px;
+}
+
+.intro-card p {
+    margin-bottom: 15px;
+    font-size: 1rem;
+}
+
+/* 输入区域 */
+.input-section {
+    background-color: white;
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+}
+
+.input-section h2 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.input-section h2 i {
+    margin-right: 10px;
+}
+
+.input-methods {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.method-card {
+    padding: 15px;
+    background-color: var(--light-bg);
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+}
+
+.method-card h3 {
+    color: var(--primary-dark);
+    margin-bottom: 12px;
+    font-size: 1.3rem;
+}
+
+#business {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 70px;
+    margin-bottom: 8px;
+}
+
+#business:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1);
+}
+
+.hint {
+    font-size: 0.9rem;
+    color: #666;
+    font-style: italic;
+    text-align: center;
+}
+
+.method-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* 方式按钮组 */
+.method-buttons {
+    gap: 10px;
+}
+
+.method-btn {
+    width: 100%;
+    text-align: left;
+    padding: 12px;
+    border: 2px solid rgba(139, 69, 19, 0.25);
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    color: var(--primary-dark);
+}
+
+.method-btn:hover {
+    background-color: rgba(139, 69, 19, 0.05);
+    border-color: rgba(139, 69, 19, 0.4);
+}
+
+.method-btn.active {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1);
+    background-color: rgba(245, 240, 230, 0.7);
+}
+
+.method-btn span:first-child {
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.method-btn .option-desc {
+    margin: 0;
+}
+
+.option {
+    display: flex;
+    align-items: flex-start;
+    padding: 12px;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.option:hover {
+    background-color: rgba(139, 69, 19, 0.05);
+}
+
+.option input[type="radio"] {
+    margin-top: 4px;
+    margin-right: 12px;
+    accent-color: var(--primary-color);
+}
+
+.option i {
+    color: var(--primary-color);
+    font-size: 1.3rem;
+    margin-right: 12px;
+    margin-top: 3px;
+}
+
+.option span {
+    font-weight: 600;
+    font-size: 1rem;
+    margin-right: 12px;
+}
+
+.option-desc {
+    color: #666;
+    font-size: 0.85rem;
+}
+
+/* 手动输入面板 */
+.manual-panel {
+    background-color: var(--light-bg);
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+    border: 1px solid var(--border-color);
+}
+
+.manual-panel h3 {
+    color: var(--primary-dark);
+    margin-bottom: 12px;
+    font-size: 1.3rem;
+}
+
+.manual-panel h3 i {
+    margin-right: 10px;
+}
+
+.instructions {
+    margin-bottom: 15px;
+    color: #666;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    text-align: center;
+}
+
+    .yao-inputs {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        align-items: start;
+    }
+
+    .yao-inputs-col {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .yao-col-title {
+        font-weight: 700;
+        color: var(--primary-dark);
+        text-align: center;
+        font-size: 1.05rem;
+        line-height: 1.2;
+        padding: 4px 0;
+    }
+
+.yao-input {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 12px;
+    padding: 12px;
+    background-color: white;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    min-height: 120px; /* 设置最小高度确保对齐 */
+}
+
+.yao-input-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.yao-preview {
+    width: 100%;
+    border-radius: 8px;
+    border: 1px dashed rgba(139, 69, 19, 0.35);
+    background: rgba(245, 240, 230, 0.6);
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    min-height: 86px;
+}
+
+.yao-preview-title {
+    font-weight: 700;
+    color: var(--primary-dark);
+    font-size: 0.95rem;
+    line-height: 1.2;
+    display: flex;
+    width: 100%;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.yao-preview-symbol {
+    font-size: 1.6rem;
+    line-height: 1.2;
+    display: inline-flex;
+    align-items: baseline;
+}
+
+.yao-preview-desc {
+    color: #666;
+    font-size: 0.85rem;
+    line-height: 1.3;
+}
+
+.yao-preview-empty {
+    color: #999;
+    font-size: 0.85rem;
+    font-style: italic;
+}
+
+.yao-label-container {
+    display: flex;
+    align-items: center; /* 居中对齐 */
+    gap: 8px;
+    margin-bottom: 0;
+    width: 100%;
+    justify-content: center; /* 居中对齐 */
+}
+
+.yao-input input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1.1rem;
+    text-align: center;
+    font-weight: bold;
+    flex-grow: 0; /* 防止输入框过度拉伸 */
+}
+
+.yao-label-container {
+    display: flex;
+    align-items: center; /* 居中对齐 */
+    gap: 8px;
+    margin-bottom: 0;
+    width: 100%;
+    justify-content: center; /* 居中对齐 */
+}
+
+.yao-input label {
+    font-weight: 600;
+    color: var(--primary-dark);
+    font-size: 1rem;
+}
+
+.hint-text {
+    font-size: 0.85rem;
+    color: #888;
+    font-weight: normal;
+}
+
+.yao-input input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1.1rem;
+    text-align: center;
+    font-weight: bold;
+}
+
+.yao-input input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1);
+}
+
+.yao-input input.error {
+    border-color: var(--error-color);
+}
+
+/* 按钮样式 */
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.btn-primary, .btn-secondary {
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(139, 69, 19, 0.2);
+}
+
+.btn-secondary {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+}
+
+.btn-secondary:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(139, 69, 19, 0.2);
+}
+
+/* 结果区域 */
+.results-section {
+    background-color: white;
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+}
+
+.results-section h2 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.results-section h2 i {
+    margin-right: 10px;
+}
+
+.results-header {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.result-info h3 {
+    color: var(--primary-dark);
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+}
+
+.result-info p {
+    color: #666;
+    margin-bottom: 5px;
+    font-size: 0.95rem;
+}
+
+.result-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* 六爻显示 */
+.six-yao-display {
+    margin-bottom: 25px;
+}
+
+.six-yao-display h3 {
+    color: var(--primary-dark);
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+}
+
+    .yao-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        background-color: var(--light-bg);
+        border-radius: 10px;
+        padding: 15px;
+        border: 1px solid var(--border-color);
+        min-height: auto;
+    }
+
+    .yao-item {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        width: 100%;
+        padding: 12px;
+        background-color: white;
+        border-radius: 8px;
+        border-left: 4px solid var(--primary-color);
+        min-height: auto;
+    }
+
+.yao-position {
+    font-weight: 700;
+    color: var(--primary-dark);
+    font-size: 1.1rem;
+}
+
+.yao-symbol {
+    font-size: 1.8rem;
+    margin: 5px 0;
+}
+
+    .yao-desc {
+        color: #666;
+        font-size: 0.85rem;
+        line-height: 1.3;
+        white-space: normal;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        line-clamp: 2;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        max-height: 2.6em;
+    }
+
+/* 标签页样式 */
+.tab-container {
+    margin-bottom: 25px;
+}
+
+.tab-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 10px;
+}
+
+.tab-btn {
+    padding: 10px 16px;
+    background-color: var(--light-bg);
+    border: none;
+    border-radius: 6px 6px 0 0;
+    font-weight: 600;
+    color: var(--primary-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    flex: 1;
+    min-width: 60px;
+    text-align: center;
+}
+
+.tab-btn:hover {
+    background-color: rgba(139, 69, 19, 0.1);
+}
+
+.tab-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.tab-content {
+    background-color: var(--light-bg);
+    border-radius: 0 10px 10px 10px;
+    padding: 20px;
+    min-height: 180px;
+    border: 1px solid var(--border-color);
+}
+
+.tab-content h3 {
+    color: var(--primary-dark);
+    margin-bottom: 12px;
+    font-size: 1.3rem;
+}
+
+.tab-content p {
+    margin-bottom: 12px;
+    line-height: 1.5;
+    font-size: 0.95rem;
+}
+
+.diagram-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 6px;
+}
+
+.diagram-label {
+    font-weight: 600;
+    color: var(--primary-dark);
+    font-size: 0.95rem;
+}
+
+.diagram-value {
+    color: #333;
+    font-size: 0.95rem;
+}
+
+    /* 结果区域 */
+    .json-section {
+        margin-top: 30px;
+    }
+
+    .json-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        margin-bottom: 15px;
+    }
+    
+    .json-actions .btn-secondary {
+        min-width: 120px;
+    }
+
+.json-section h3 {
+    color: var(--primary-dark);
+    margin-bottom: 12px;
+    font-size: 1.3rem;
+}
+
+.json-section h3 i {
+    margin-right: 10px;
+}
+
+    .json-container {
+        background-color: #2c1810;
+        border-radius: 8px;
+        padding: 15px;
+        max-height: 250px;
+        overflow-y: auto;
+        border: 1px solid #444;
+        margin-bottom: 20px;
+    }
+
+#json-output {
+    color: #e0c9a8;
+    font-family: 'Monaco', 'Consolas', monospace;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+    .json-hint {
+        margin-top: 8px;
+        color: #666;
+        font-style: italic;
+        font-size: 0.85rem;
+    }
+
+    /* 页脚 */
+    footer {
+        text-align: center;
+        padding: 30px 0 20px;
+        color: #666;
+        font-size: 0.9rem;
+        border-top: 1px solid var(--border-color);
+        margin-top: 40px;
+    }
+
+    .disclaimer {
+        margin-top: 10px;
+        font-style: italic;
+        color: #888;
+        font-size: 0.85rem;
+    }
+
+    /* Toast提示框样式 */
+    .toast {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 15px 25px;
+        border-radius: 8px;
+        color: white;
+        font-weight: 600;
+        z-index: 9999;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        transition: opacity 0.25s ease, transform 0.25s ease;
+        opacity: 1;
+    }
+
+    .toast-success {
+        background-color: var(--success-color);
+    }
+
+    .toast-error {
+        background-color: var(--error-color);
+    }
+
+    .toast-warning {
+        background-color: #ffa500;
+    }
+
+    .toast-info {
+        background-color: var(--primary-color);
+    }
+
+    /* 爻位符号样式 */
+    .yao-symbol {
+        font-family: 'Segoe UI Symbol', 'Arial Unicode MS', sans-serif;
+        font-size: 2.5rem;
+        margin: 0 15px;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    .yao-symbol.old-yin {
+        color: #4169e1; /* 老阴（蓝色） */
+    }
+
+    .yao-symbol.old-yang {
+        color: #dc143c; /* 老阳（红色） */
+    }
+
+    .yao-symbol.yin {
+        color: #6495ed; /* 阴爻（浅蓝色） */
+    }
+
+    .yao-symbol.yang {
+        color: #ff6347; /* 阳爻（橙色） */
+    }
+
+    /* 易经特殊符号样式 */
+    .trigram-symbol {
+        font-family: 'Segoe UI Symbol', 'Arial Unicode MS', sans-serif;
+        font-size: 2rem;
+        margin: 0 5px;
+    }
+
+    .hexagram-symbol {
+        font-family: 'Segoe UI Symbol', 'Arial Unicode MS', sans-serif;
+        font-size: 2.5rem;
+        margin: 0 10px;
+    }
+
+    /* 加载动画 */
+    .loading-spinner {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        border: 4px solid rgba(139, 69, 19, 0.3);
+        border-radius: 50%;
+        border-top-color: var(--primary-color);
+        animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(245, 240, 230, 0.9);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9998;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .loading-text {
+        color: var(--primary-dark);
+        font-size: 1.2rem;
+        font-weight: 600;
+    }
+
+    /* 易经背景装饰 */
+
+    /* 易经故事模态框样式 */
+    .yijing-story-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 10000;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        justify-content: center;
+        align-items: center;
+        overflow-y: auto;
+    }
+
+    .yijing-story-modal.show {
+        display: flex;
+        opacity: 1;
+    }
+
+    .yijing-story-modal-content {
+        background-color: white;
+        width: 85%;
+        max-width: 700px;
+        max-height: 80vh;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        margin: 20px;
+    }
+
+    .yijing-story-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 25px;
+        background-color: var(--primary-color);
+        color: white;
+        border-bottom: 2px solid var(--primary-dark);
+    }
+
+    .yijing-story-modal-header h2 {
+        margin: 0;
+        font-size: 1.6rem;
+        color: white;
+    }
+
+    .yijing-story-close-btn {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 2.5rem;
+        cursor: pointer;
+        line-height: 1;
+        padding: 0;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.2s ease;
+    }
+
+    .yijing-story-close-btn:hover {
+        transform: scale(1.2);
+    }
+
+    .yijing-story-modal-body {
+        padding: 25px;
+        overflow-y: auto;
+        flex-grow: 1;
+    }
+
+    .yijing-story-content {
+        font-size: 1rem;
+        line-height: 1.7;
+        color: var(--text-dark);
+    }
+
+    .yijing-story-content h3 {
+        color: var(--primary-color);
+        margin: 1.5em 0 0.5em 0;
+        font-size: 1.3rem;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 8px;
+    }
+
+    .yijing-story-content p {
+        margin: 0.8em 0;
+        text-indent: 2em;
+    }
+
+    .yijing-story-content em {
+        color: #666;
+        font-style: italic;
+    }
+
+    @media (max-width: 768px) {
+        .yijing-story-modal-content {
+            width: 90%;
+            max-height: 85vh;
+            margin: 15px;
+        }
+
+        .yijing-story-modal-header {
+            padding: 15px 20px;
+        }
+
+        .yijing-story-modal-header h2 {
+            font-size: 1.4rem;
+        }
+
+        .yijing-story-modal-body {
+            padding: 20px;
+        }
+
+        .yijing-story-content {
+            font-size: 0.95rem;
+        }
+
+        .yijing-story-content h3 {
+            font-size: 1.2rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .yijing-story-modal-content {
+            width: 95%;
+            max-height: 90vh;
+            margin: 10px;
+        }
+
+        .yijing-story-modal-header {
+            padding: 12px 16px;
+        }
+
+        .yijing-story-modal-body {
+            padding: 16px;
+        }
+    }
+
+    /* 响应式设计 - PC端优化 */
+    @media (min-width: 768px) {
+        .container {
+            max-width: 800px;
+            padding: 20px;
+        }
+        
+        .intro-card, .input-section, .results-section {
+            padding: 25px;
+        }
+        
+        .intro-card h2, .input-section h2, .results-section h2 {
+            font-size: 1.8rem;
+        }
+        
+        .input-methods {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+        
+        .method-card h3 {
+            font-size: 1.4rem;
+        }
+        
+        .method-options {
+            flex-direction: column;
+        }
+        
+        .action-buttons {
+            flex-direction: row;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .btn-primary, .btn-secondary {
+            width: auto;
+            min-width: 200px;
+            padding: 15px 30px;
+        }
+        
+        .results-header {
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .result-actions {
+            flex-direction: row;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .diagram-item {
+            flex-direction: row;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .diagram-label {
+            min-width: 140px;
+        }
+    }
+
+    @media (min-width: 768px) {
+        .yao-container {
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            padding: 18px;
+        }
+        
+        .yao-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 15px;
+        }
+        
+        .yao-position {
+            min-width: auto;
+        }
+        
+        .yao-symbol {
+            font-size: 1.8rem;
+        }
+        
+        .yao-desc {
+            flex: 1;
+            white-space: normal;
+            overflow: visible;
+            text-overflow: clip;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+    }
+
+    /* 响应式设计 - 平板端 */
+    @media (min-width: 576px) and (max-width: 767px) {
+        .container {
+            max-width: 90%;
+        }
+        
+        .tab-btn {
+            min-width: 70px;
+            font-size: 0.85rem;
+            padding: 8px 12px;
+        }
+        
+        .action-buttons {
+            flex-direction: column;
+        }
+        
+        .btn-primary, .btn-secondary {
+            width: 100%;
+        }
+    }
+
+    /* 响应式设计 - 手机端 */
+    @media (max-width: 575px) {
+        .container {
+            padding: 10px;
+        }
+        
+        .intro-card, .input-section, .results-section {
+            padding: 15px;
+        }
+        
+        .intro-card h2, .input-section h2, .results-section h2 {
+            font-size: 1.4rem;
+        }
+        
+        .method-card h3, .manual-panel h3, .six-yao-display h3 {
+            font-size: 1.2rem;
+        }
+        
+        .tab-buttons {
+            overflow-x: auto;
+            flex-wrap: nowrap;
+            padding-bottom: 8px;
+        }
+        
+        .tab-btn {
+            font-size: 0.8rem;
+            padding: 8px 10px;
+            min-width: 50px;
+        }
+        
+        .yao-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            align-items: start;
+        }
+
+        .yao-inputs-col {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .yao-input {
+            grid-template-columns: 1fr;
+            gap: 10px;
+            padding: 10px;
+            min-height: auto;
+            justify-content: start;
+        }
+
+        .yao-input-main {
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .yao-label-container {
+            justify-content: flex-start;
+            width: auto;
+            white-space: nowrap;
+        }
+
+        .yao-input input {
+            padding: 10px;
+            font-size: 1rem;
+            max-width: 110px;
+        }
+
+        .yao-preview {
+            min-height: auto;
+            padding: 10px 12px;
+        }
+
+        .yao-preview-title {
+            font-size: 0.95rem;
+        }
+
+        .yao-preview-desc {
+            font-size: 0.85rem;
+        }
+        
+        .yao-container {
+            grid-template-columns: 1fr;
+            gap: 8px;
+            padding: 12px;
+        }
+        
+        .yao-item {
+            padding: 10px;
+            gap: 6px;
+        }
+        
+        .yao-desc {
+            font-size: 0.8rem;
+            line-clamp: 3;
+            -webkit-line-clamp: 3;
+            max-height: 3.9em;
+        }
+        
+        .json-container {
+            max-height: 200px;
+            padding: 12px;
+        }
+        
+        #json-output {
+            font-size: 0.8rem;
+        }
+    }
+    </style>
+
+
+</head>
+<body>
+    <div class="container">
+        <main>
+        <!-- 简介区域 -->
+            <section class="intro-section">
+                <div class="intro-card">
+                    <h2>简介</h2>
+                    <p>基于传统的金钱卦算法，结合现代交互技术，提供易经卜卦体验。支持自动摇掷和手动摇掷后输入两种方式，提供本卦、变卦、错卦、综卦、互卦、杂卦等七种卦象计算。</p>
+                    <div class="action-buttons" style="margin-top: 20px;">
+<button id="yijing-story-btn" class="btn-secondary" style="max-width: 250px;">
+                        易经基础
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 输入区域 -->
+            <section class="input-section">
+                <h2>起卦</h2>
+                <div class="input-methods">
+                    <div class="method-card">
+<h3>卜事</h3>
+                        <textarea id="business" placeholder="请输入您要占卜的事项或问题..." rows="3"></textarea>
+                        <p class="hint">例如：事业、感情、投资决策等</p>
+                    </div>
+                    
+                    <div class="method-card">
+                        <h3>方式</h3>
+                        <div class="method-options method-buttons" role="group" aria-label="起卦方式">
+                            <button id="method-auto" type="button" class="method-btn active" data-method="auto">
+                                <span>自动</span>
+                                <span class="option-desc">系统随机生成六爻</span>
+                            </button>
+                            <button id="method-manual" type="button" class="method-btn" data-method="manual">
+                                <span>手动</span>
+                                <span class="option-desc">按爻位顺序手动摇掷后输入六爻</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 手动输入面板 -->
+                <div id="manual-panel" class="manual-panel" style="display: none;">
+                    <h3>六爻 <span class="instructions">（共摇掷3枚钱币，钱币的字面为3，钱币的花面为2。注意顺序，从下卦的初爻开始至上爻。）</span></h3>
+                    
+                    <div class="yao-inputs">
+                        <div class="yao-inputs-col">
+                            <div class="yao-col-title">上卦</div>
+                            <!-- 左侧块：上爻、五爻、四爻 -->
+                            <div class="yao-input">
+                                <div class="yao-input-main">
+                                    <div class="yao-label-container">
+                                        <label for="yao6">上爻</label>
+                                        <span class="hint-text"></span>
+                                    </div>
+                                    <input type="text" id="yao6" 
+                                           placeholder="" 
+                                           maxlength="3" 
+                                           title="请输入三个字符，只能是2或3" 
+                                           pattern="[23]{3}">
+                                </div>
+                                <div class="yao-preview" id="yao6-preview">
+                                    <div class="yao-preview-empty">输入3位(2/3)后显示</div>
+                                </div>
+                            </div>
+                            <div class="yao-input">
+                                <div class="yao-input-main">
+                                    <div class="yao-label-container">
+                                        <label for="yao5">五爻</label>
+                                        <span class="hint-text"></span>
+                                    </div>
+                                    <input type="text" id="yao5" 
+                                           placeholder="" 
+                                           maxlength="3" 
+                                           title="请输入三个字符，只能是2或3" 
+                                           pattern="[23]{3}">
+                                </div>
+                                <div class="yao-preview" id="yao5-preview">
+                                    <div class="yao-preview-empty">输入3位(2/3)后显示</div>
+                                </div>
+                            </div>
+                            <div class="yao-input">
+                                <div class="yao-input-main">
+                                    <div class="yao-label-container">
+                                        <label for="yao4">四爻</label>
+                                        <span class="hint-text"></span>
+                                    </div>
+                                    <input type="text" id="yao4" 
+                                           placeholder="" 
+                                           maxlength="3" 
+                                           title="请输入三个字符，只能是2或3" 
+                                           pattern="[23]{3}">
+                                </div>
+                                <div class="yao-preview" id="yao4-preview">
+                                    <div class="yao-preview-empty">输入3位(2/3)后显示</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="yao-inputs-col">
+                            <div class="yao-col-title">下卦</div>
+                            <!-- 右侧块：三爻、二爻、初爻 -->
+                            <div class="yao-input">
+                                <div class="yao-input-main">
+                                    <div class="yao-label-container">
+                                        <label for="yao3">三爻</label>
+                                        <span class="hint-text"></span>
+                                    </div>
+                                    <input type="text" id="yao3" 
+                                           placeholder="" 
+                                           maxlength="3" 
+                                           title="请输入三个字符，只能是2或3" 
+                                           pattern="[23]{3}">
+                                </div>
+                                <div class="yao-preview" id="yao3-preview">
+                                    <div class="yao-preview-empty">输入3位(2/3)后显示</div>
+                                </div>
+                            </div>
+                            <div class="yao-input">
+                                <div class="yao-input-main">
+                                    <div class="yao-label-container">
+                                        <label for="yao2">二爻</label>
+                                        <span class="hint-text"></span>
+                                    </div>
+                                    <input type="text" id="yao2" 
+                                           placeholder="" 
+                                           maxlength="3" 
+                                           title="请输入三个字符，只能是2或3" 
+                                           pattern="[23]{3}">
+                                </div>
+                                <div class="yao-preview" id="yao2-preview">
+                                    <div class="yao-preview-empty">输入3位(2/3)后显示</div>
+                                </div>
+                            </div>
+                            <div class="yao-input">
+                                <div class="yao-input-main">
+                                    <div class="yao-label-container">
+                                        <label for="yao1">初爻</label>
+                                        <span class="hint-text"></span>
+                                    </div>
+                                    <input type="text" id="yao1" 
+                                           placeholder="" 
+                                           maxlength="3" 
+                                           title="请输入三个字符，只能是2或3" 
+                                           pattern="[23]{3}">
+                                </div>
+                                <div class="yao-preview" id="yao1-preview">
+                                    <div class="yao-preview-empty">输入3位(2/3)后显示</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="action-buttons" id="action-buttons" style="display: none;">
+                    <button id="calculate-btn" class="btn-primary">
+                        起卦
+                    </button>
+                </div>
+            </section>
+
+            <!-- 结果显示区域 -->
+            <section class="results-section" style="display: none;">
+                <h2 id="result-title">起卦完成</h2>
+                <div id="result-time"></div>
+                <div id="result-business"></div>
+
+                <!-- 卦象分析标签页 -->
+                <div class="tab-container">
+                    <div class="tab-buttons">
+                        <button class="tab-btn active" data-tab="original">本卦</button>
+                        <button class="tab-btn" data-tab="active">主变</button>
+                        <button class="tab-btn" data-tab="change">变卦</button>
+                        <button class="tab-btn" data-tab="opposite">错卦</button>
+                        <button class="tab-btn" data-tab="reverse">综卦</button>
+                        <button class="tab-btn" data-tab="mutual">互卦</button>
+                        <button class="tab-btn" data-tab="swap">杂卦</button>
+                    </div>
+                    
+                    <div class="tab-content">
+                        <!-- 各个卦象的内容将由JavaScript动态填充 -->
+                    </div>
+                </div>
+
+
+                <!-- 原始结果显示 -->
+                <div class="json-section">
+                    <p style="text-align: center; margin-bottom: 15px; color: #666; font-style: italic; font-size: 0.9rem;">
+                        推荐将结果复制到大语言模型进行解读
+                    </p>
+                    <div class="json-actions" style="margin-bottom: 15px;">
+                        <button id="copy-btn" class="btn-secondary">
+                            复制结果
+                        </button>
+                        <button id="export-btn" class="btn-secondary">
+                            导出结果
+                        </button>
+                    </div>
+                    <div class="json-container">
+                        <pre id="json-output"></pre>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- 易经故事模态框 -->
+        <div id="yijing-story-modal" class="yijing-story-modal" style="display: none;">
+            <div class="yijing-story-modal-content">
+                <div class="yijing-story-modal-header">
+                    <h2>易经基础</h2>
+                    <button id="yijing-story-close" class="yijing-story-close-btn">&times;</button>
+                </div>
+                <div class="yijing-story-modal-body">
+                    <div class="yijing-story-content">
+                        <!-- 内容将动态加载 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript文件 - 内联核心逻辑 -->
+    <script>
+    /**
+     * 易经金钱卦系统核心逻辑
+     * 基于《周易》六十四卦的JavaScript实现
+     */
+
+    const Symbols = {
+        // 天地人三道
+        THREE_DAO: {
+            6: "天道",
+            5: "天道",
+            4: "人道",
+            3: "人道",
+            2: "地道",
+            1: "地道"
+        },
+
+        // 爻位名称字典 (1-6 -> 爻位名称)
+        YAO_POSITION_NAMES: {
+            6: "上爻",
+            5: "五爻",
+            4: "四爻",
+            3: "三爻",
+            2: "二爻",
+            1: "初爻"
+        },
+
+        // 阴阳爻位名称字典 (0: 阴爻, 1: 阳爻)
+        // 正确对应关系：
+        // 1. 初爻：初九（阳）或初六（阴）
+        // 2. 二爻：九二（阳）或六二（阴）
+        // 3. 三爻：九三（阳）或六三（阴）
+        // 4. 四爻：九四（阳）或六四（阴）
+        // 5. 五爻：九五（阳）或六五（阴）
+        // 6. 上爻：上九（阳）或上六（阴）
+        YAO_YINYANG_POSITION_NAMES: {
+            0: {
+                6: "上六",
+                5: "六五",
+                4: "六四",
+                3: "六三",
+                2: "六二",
+                1: "初六"
+            },
+            1: {
+                6: "上九",
+                5: "九五",
+                4: "九四",
+                3: "九三",
+                2: "九二",
+                1: "初九"
+            }
+        },
+
+        // 八卦字典 (三爻二进制 -> 八卦符号，从初爻开始)
+        TRIGRAMS: {
+            "111": "☰:乾:天",  // 乾（初爻阳、二爻阳、三爻阳）
+            "110": "☱:兑:泽",  // 兑（初爻阳、二爻阳、三爻阴）
+            "101": "☲:离:火",  // 离（初爻阳、二爻阴、三爻阳）
+            "100": "☳:震:雷",  // 震（初爻阳、二爻阴、三爻阴）
+            "011": "☴:巽:风",  // 巽（初爻阴、二爻阳、三爻阳）
+            "010": "☵:坎:水",  // 坎（初爻阴、二爻阳、三爻阴）
+            "001": "☶:艮:山",  // 艮（初爻阴、二爻阴、三爻阳）
+            "000": "☷:坤:地"   // 坤（初爻阴、二爻阴、三爻阴）
+        },
+
+        // 六十四卦字典 (上下卦组合 -> [卦象符号, 卦名])
+        HEXAGRAMS: {
+            // 四阳宫
+            
+            // 乾宫八卦:爻划三:西北:父
+            "☰☰": "䷀:上乾下乾:乾为天",      // 本宫卦
+            "☰☴": "䷫:上乾下巽:天风姤",      // 一世卦（初爻变）
+            "☰☶": "䷠:上乾下艮:天山遁",      // 二世卦（初、二爻变）
+            "☰☷": "䷋:上乾下坤:天地否",      // 三世卦（初、二、三爻变）
+            "☴☷": "䷓:上巽下坤:风地观",      // 四世卦（初、二、三、四爻变）
+            "☶☷": "䷖:上艮下坤:山地剥",      // 五世卦（初、二、三、四、五爻变）
+            "☲☷": "䷢:上离下坤:火地晋",      // 游魂卦（四爻变回本宫）
+            "☲☰": "䷍:上离下乾:火天大有",    // 归魂卦（下卦变回本宫）
+            
+            // 坎宫八卦:爻划五:正北:中男
+            "☵☵": "䷜:上坎下坎:坎为水",      // 本宫卦
+            "☵☱": "䷻:上坎下兑:水泽节",      // 一世卦（初爻变）
+            "☵☳": "䷂:上坎下震:水雷屯",      // 二世卦（初、二爻变）
+            "☵☲": "䷾:上坎下离:水火既济",    // 三世卦（初、二、三爻变）
+            "☱☲": "䷰:上兑下离:泽火革",      // 四世卦（初、二、三、四爻变）
+            "☳☲": "䷶:上震下离:雷火丰",      // 五世卦（初、二、三、四、五爻变）
+            "☷☲": "䷣:上坤下离:地火明夷",    // 游魂卦（四爻变回本宫）
+            "☷☵": "䷆:上坤下坎:地水师",      // 归魂卦（下卦变回本宫）
+            
+            // 艮宫八卦:爻划五:东南:少男
+            "☶☶": "䷳:上艮下艮:艮为山",      // 本宫卦
+            "☶☲": "䷕:上艮下离:山火贲",      // 一世卦（初爻变）
+            "☶☰": "䷙:上艮下乾:山天大畜",    // 二世卦（初、二爻变）
+            "☶☱": "䷨:上艮下兑:山泽损",      // 三世卦（初、二、三爻变）
+            "☲☱": "䷥:上离下兑:火泽睽",      // 四世卦（初、二、三、四爻变）
+            "☰☱": "䷉:上乾下兑:天泽履",      // 五世卦（初、二、三、四、五爻变）
+            "☴☱": "䷼:上巽下兑:风泽中孚",    // 游魂卦（四爻变回本宫）
+            "☴☶": "䷴:上巽下艮:风山渐",      // 归魂卦（下卦变回本宫）
+            
+            // 震宫八卦:爻划五:正东:长男
+            "☳☳": "䷲:上震下震:震为雷",      // 本宫卦
+            "☳☷": "䷏:上震下坤:雷地豫",      // 一世卦（初爻变）
+            "☳☵": "䷧:上震下坎:雷水解",      // 二世卦（初、二爻变）
+            "☳☴": "䷟:上震下巽:雷风恒",      // 三世卦（初、二、三爻变）
+            "☷☴": "䷭:上坤下巽:地风升",      // 四世卦（初、二、三、四爻变）
+            "☵☴": "䷯:上坎下巽:水风井",      // 五世卦（初、二、三、四、五爻变）
+            "☱☴": "䷛:上兑下巽:泽风大过",    // 游魂卦（四爻变回本宫）
+            "☱☳": "䷐:上兑下震:泽雷随",      // 归魂卦（下卦变回本宫）
+            
+            // 四阴宫
+            
+            // 巽宫八卦:爻划四:东南:长女
+            "☴☴": "䷸:上巽下巽:巽为风",      // 本宫卦
+            "☴☰": "䷈:上巽下乾:风天小畜",    // 一世卦（初爻变）
+            "☴☲": "䷤:上巽下离:风火家人",    // 二世卦（初、二爻变）
+            "☴☳": "䷩:上巽下震:风雷益",      // 三世卦（初、二、三爻变）
+            "☰☳": "䷘:上乾下震:天雷无妄",    // 四世卦（初、二、三、四爻变）
+            "☲☳": "䷔:上离下震:火雷噬嗑",    // 五世卦（初、二、三、四、五爻变）
+            "☶☳": "䷚:上艮下震:山雷颐",      // 游魂卦（四爻变回本宫）
+            "☶☴": "䷑:上艮下巽:山风蛊",      // 归魂卦（下卦变回本宫）
+            
+            // 离宫八卦:爻划四:正南:中女
+            "☲☲": "䷝:上离下离:离为火",      // 本宫卦
+            "☲☶": "䷷:上离下艮:火山旅",      // 一世卦（初爻变）
+            "☲☴": "䷱:上离下巽:火风鼎",      // 二世卦（初、二爻变）
+            "☲☵": "䷿:上离下坎:火水未济",    // 三世卦（初、二、三爻变）
+            "☶☵": "䷃:上艮下坎:山水蒙",      // 四世卦（初、二、三、四爻变）
+            "☴☵": "䷺:上巽下坎:风水涣",      // 五世卦（初、二、三、四、五爻变）
+            "☰☵": "䷅:上乾下坎:天水讼",      // 游魂卦（四爻变回本宫）
+            "☰☲": "䷌:上乾下离:天火同人",    // 归魂卦（下卦变回本宫）
+            
+            // 坤宫八卦:爻划六:西南:母
+            "☷☷": "䷁:上坤下坤:坤为地",      // 本宫卦
+            "☷☳": "䷗:上坤下震:地雷复",      // 一世卦（初爻变）
+            "☷☱": "䷒:上坤下兑:地泽临",      // 二世卦（初、二爻变）
+            "☷☰": "䷊:上坤下乾:地天泰",      // 三世卦（初、二、三爻变）
+            "☳☰": "䷡:上震下乾:雷天大壮",    // 四世卦（初、二、三、四爻变）
+            "☱☰": "䷪:上兑下乾:泽天夬",      // 五世卦（初、二、三、四、五爻变）
+            "☵☰": "䷄:上坎下乾:水天需",      // 游魂卦（四爻变回本宫）
+            "☵☷": "䷇:上坎下坤:水地比",      // 归魂卦（下卦变回本宫）
+            
+            // 兑宫八卦:爻划四:正西:少女
+            "☱☱": "䷹:上兑下兑:兑为泽",      // 本宫卦
+            "☱☵": "䷮:上兑下坎:泽水困",      // 一世卦（初爻变）
+            "☱☷": "䷬:上兑下坤:泽地萃",      // 二世卦（初、二爻变）
+            "☱☶": "䷞:上兑下艮:泽山咸",      // 三世卦（初、二、三爻变）
+            "☵☶": "䷦:上坎下艮:水山蹇",      // 四世卦（初、二、三、四爻变）
+            "☷☶": "䷎:上坤下艮:地山谦",      // 五世卦（初、二、三、四、五爻变）
+            "☳☶": "䷽:上震下艮:雷山小过",    // 游魂卦（四爻变回本宫）
+            "☳☱": "䷵:上震下兑:雷泽归妹"     // 归魂卦（下卦变回本宫）
+        }
+    };
+
+    class SixYao {
+        /**
+         * 自动生成六爻（金钱卦）
+         * @returns {Array} 六爻列表，每爻结构为 [[投掷结果], 爻值]
+         */
+        static autoSixYao() {
+            /**
+             * 生成一爻的数据（金钱卦）
+             * @param {number} i 爻位（1-6）
+             * @returns {Array} [[投掷结果], 爻值]
+             */
+            const autoOneYao = (i) => {
+                const baseSymbols = [0, 2, 0, 3]; // 0号位为无效, 1阳为3, 2阴为2
+                
+                for (let attempt = 0; attempt < 99; attempt++) {
+                    const oneYao = [
+                        baseSymbols[Math.floor(Math.random() * baseSymbols.length)],
+                        baseSymbols[Math.floor(Math.random() * baseSymbols.length)],
+                        baseSymbols[Math.floor(Math.random() * baseSymbols.length)]
+                    ];
+                    
+                    const total = oneYao.reduce((sum, val) => sum + val, 0);
+                    
+                if (!oneYao.includes(0)) {
+                    return [oneYao, total];
+                }
+                }
+                
+                throw new Error("无效摇掷了99次，如需重新摇掷，请重新运行程序。");
+            };
+            
+            const sixYao = [];
+            for (let i = 1; i <= 6; i++) {
+                sixYao.push(autoOneYao(i));
+            }
+            
+            return sixYao;
+        }
+
+        /**
+         * 从用户输入解析六爻数据
+         * @param {Array} inputs 用户输入的六爻值数组
+         * @returns {Array} 六爻列表，每爻结构为 [[投掷结果], 爻值]
+         */
+        static parseSixYao(inputs) {
+            const sixYao = [];
+            
+            for (let i = 0; i < 6; i++) {
+                const input = inputs[i];
+                if (!/^[23]{3}$/.test(input)) {
+                    throw new Error(`第${i+1}爻输入无效：${input}。请输入三个字符，每个字符只能是2或3，例如：333, 222, 332, 322`);
+                }
+                
+                const oneYao = input.split('').map(Number);
+                const total = oneYao.reduce((sum, val) => sum + val, 0);
+                sixYao.push([oneYao, total]);
+            }
+            
+            return sixYao;
+        }
+
+        /**
+         * 解析六爻
+         * @param {Array} sixYao 六爻数据
+         * @returns {Array} 解析后的六爻信息
+         */
+        static parseSixYaoInfo(sixYao) {
+            const parsedSixYao = [];
+            
+            for (let i = sixYao.length - 1; i >= 0; i--) {
+                const yao = sixYao[i];
+                const yaoIndex = i + 1;  // 修正：索引应为1-6，上爻=6，初爻=1
+                const yaoValue = yao[1];
+                const isYin = yaoValue % 2 === 0;
+                const yaoName = Symbols.YAO_YINYANG_POSITION_NAMES[isYin ? 0 : 1][yaoIndex];
+                parsedSixYao.push(`${yaoName} ${JSON.stringify(yao)}`);
+            }
+            
+            return parsedSixYao;
+        }
+    }
+
+    class Calculator {
+        /**
+         * 获取上下卦
+         * @param {Array} sixYao 六爻数据
+         * @returns {Object} 上下卦信息
+         */
+        static getUpAndDownSymbols(sixYao) {
+            const sixYaoUp = sixYao.slice(3); // 上卦：从第四爻到第六爻
+            const sixYaoDown = sixYao.slice(0, 3); // 下卦：从第一爻到第三爻
+            
+            const sixYaoUpSymbols = sixYaoUp.map(item => item[1] % 2 === 0 ? '0' : '1').join('');
+            const sixYaoDownSymbols = sixYaoDown.map(item => item[1] % 2 === 0 ? '0' : '1').join('');
+            
+            const diagramsUp = Symbols.TRIGRAMS[sixYaoUpSymbols];
+            const diagramsDown = Symbols.TRIGRAMS[sixYaoDownSymbols];
+            
+            // 提取八卦符号（第一部分）
+            const upSymbol = diagramsUp ? diagramsUp.split(':')[0] : "?";
+            const downSymbol = diagramsDown ? diagramsDown.split(':')[0] : "?";
+            const diagrams = Symbols.HEXAGRAMS[upSymbol + downSymbol];
+            
+            return {
+                "卦理": "本卦又称主卦、原卦、遇卦，提示初始或当下。",
+                "上卦": diagramsUp || "未知",
+                "下卦": diagramsDown || "未知",
+                [diagramsUp && diagramsDown ? `${diagramsUp.split(':')[1]}${diagramsDown.split(':')[1]}` : "?"]: diagrams || "未知"
+            };
+        }
+
+        /**
+         * 获取主变爻信息
+         * @param {Array} sixYao 六爻数据
+         * @returns {Object} 主变爻信息
+         */
+        static getActiveSymbols(sixYao) {
+            const sumSixYao = sixYao.reduce((sum, item) => sum + item[1], 0);
+            const num = 55 - sumSixYao;
+            
+            let cur = 0;
+            const tmp = num % 12;
+            if (tmp === 0) {
+                cur = 1;
+            } else if (tmp < 7) {
+                cur = tmp;
+            } else {
+                cur = 6 - (tmp % 6) + 1;
+            }
+            
+            // 找出六九动爻
+            const activeSymbol = sixYao
+                .map((item, index) => ({item, index}))
+                .filter(({item}) => item[1] === 6 || item[1] === 9)
+                .map(({item, index}) => Symbols.YAO_YINYANG_POSITION_NAMES[item[1] === 6 ? 0 : 1][index + 1]);
+            
+            const activeSymbolDesc = activeSymbol.length > 0 ? activeSymbol.join(', ') : "静卦，无动爻。";
+            
+            return {
+                "六爻之和": `${sumSixYao}`,
+                "天地余数": `55-${sumSixYao}=${num} ${num % 2 === 0 ? "偶数偏静" : "奇数偏动"}。`,
+                "主变爻序": `${cur}`,
+                "主变爻位": Symbols.YAO_YINYANG_POSITION_NAMES[sixYao[cur-1][1] === 6 || sixYao[cur-1][1] === 8 ? 0 : 1][cur],
+                "主变变在": Symbols.THREE_DAO[cur],
+                "六九动爻": activeSymbolDesc,
+                "变动说明": "上两爻为天，中两爻为人，下两爻为地。主变爻仅一个，动爻可六个（太杂乱）也可无（静卦），二者各占位天地人，重叠则表示极强。"
+            };
+        }
+
+        /**
+         * 获取变卦
+         * @param {Array} sixYao 六爻数据
+         * @returns {Object} 变卦信息
+         */
+        static getChangesSymbols(sixYao) {
+            const newSixYao = sixYao.map(item => {
+                const total = item[1];
+                if (total === 9) {
+                    return [item[0], 6]; // 老阳变阴
+                } else if (total === 6) {
+                    return [item[0], 9]; // 老阴变阳
+                }
+                return item;
+            });
+            
+            const newTwoSymbols = this.getUpAndDownSymbols(newSixYao);
+            newTwoSymbols["卦理"] = "变卦又称之卦，由本卦六九动爻变动而来(动爻变，主变爻不变)。提示万事万物皆可变，阴阳交替，老阴变阳，老阳变阴。";
+            
+            return newTwoSymbols;
+        }
+
+        /**
+         * 获得错卦
+         * @param {Array} sixYao 六爻数据
+         * @returns {Object} 错卦信息
+         */
+        static getOppositeSymbols(sixYao) {
+            const newSixYao = sixYao.map(item => {
+                const total = item[1];
+                const isYin = total % 2 === 0;
+                // 阴变阳，阳变阴（6->9, 7->8, 8->7, 9->6）
+                let newTotal;
+                if (total === 6) newTotal = 9;
+                else if (total === 7) newTotal = 8;
+                else if (total === 8) newTotal = 7;
+                else if (total === 9) newTotal = 6;
+                else newTotal = total;
+                
+                return [item[0], newTotal];
+            });
+            
+            const newTwoSymbols = this.getUpAndDownSymbols(newSixYao);
+            newTwoSymbols["卦理"] = "错卦又称对卦，由本卦阴阳交错而来。提醒立场相同，目标一致，角度不同，所见不同。提示最终结果，阴向阳发展，阳向阴发展。由于钱币阴阳不明或有误，错卦和本卦一样重要，错卦也可能就是本卦。";
+            
+            return newTwoSymbols;
+        }
+
+        /**
+         * 获得综卦
+         * @param {Array} sixYao 六爻数据
+         * @returns {Object} 综卦信息
+         */
+        static getReverseSymbols(sixYao) {
+            const newSixYao = [...sixYao].reverse();
+            const newTwoSymbols = this.getUpAndDownSymbols(newSixYao);
+            newTwoSymbols["卦理"] = "综卦，由本卦颠倒旋转180度而来。提醒立场相对，角度不同，所见不同。提示反观视角(第三者的视角或回顾时的视角)。";
+            
+            return newTwoSymbols;
+        }
+
+        /**
+         * 取得互卦
+         * @param {Array} sixYao 六爻数据
+         * @returns {Object} 互卦信息
+         */
+        static getMutualSymbols(sixYao) {
+            // 互卦：取二、三、四爻为下卦，三、四、五爻为上卦
+            const newSixYao = [...sixYao.slice(1, 4), ...sixYao.slice(2, 5)];
+            const newTwoSymbols = this.getUpAndDownSymbols(newSixYao);
+            newTwoSymbols["卦理"] = "互卦又称复卦，由本卦去初爻和上爻，下卦取二三四，上卦取三四五。提示交互过程(中间互动发展的过程)。各地方言差异，错综互杂和错综复杂一字之差，理念相差较大。";
+            
+            return newTwoSymbols;
+        }
+
+        /**
+         * 获得杂卦
+         * @param {Array} sixYao 六爻数据
+         * @returns {Object} 杂卦信息
+         */
+        static getSwapUpAndDownSymbols(sixYao) {
+            // 杂卦：上下卦换位
+            const newSixYao = [...sixYao.slice(3), ...sixYao.slice(0, 3)];
+            const newTwoSymbols = this.getUpAndDownSymbols(newSixYao);
+            newTwoSymbols["卦理"] = "杂卦，由本卦上下卦换位而来。杂揉众卦，错综其义，或以同相类，或以异相明也。六十四卦有三十二对杂卦，上下相对互为杂卦。";
+            
+            return newTwoSymbols;
+        }
+
+        /**
+         * 运行完整的卦象计算流程
+         * @param {Array} sixYao 六爻数据
+         * @returns {Object} 所有卦象计算结果
+         */
+        static run(sixYao) {
+            return {
+                "六爻": SixYao.parseSixYaoInfo(sixYao),
+                "本卦": this.getUpAndDownSymbols(sixYao),
+                "主变": this.getActiveSymbols(sixYao),
+                "变卦": this.getChangesSymbols(sixYao),
+                "错卦": this.getOppositeSymbols(sixYao),
+                "综卦": this.getReverseSymbols(sixYao),
+                "互卦": this.getMutualSymbols(sixYao),
+                "杂卦": this.getSwapUpAndDownSymbols(sixYao)
+            };
+        }
+    }
+
+    // 为浏览器环境提供全局对象
+    if (typeof window !== 'undefined') {
+        window.Symbols = Symbols;
+        window.SixYao = SixYao;
+        window.Calculator = Calculator;
+        window.BookOfChanges = { Symbols, SixYao, Calculator };
+    }
+    </script>
+
+    <!-- 前端交互逻辑 -->
+    <script>
+    /**
+     * 易经金钱卦前端交互逻辑
+     */
+
+    class BookOfChangesUI {
+        constructor() {
+            this.currentResults = null;
+            this.elements = {}; // 元素缓存对象
+            
+            // 常量定义
+            this.constants = {
+                YAO_POSITIONS: ['初爻', '二爻', '三爻', '四爻', '五爻', '上爻'],
+                YAO_SYMBOLS: {
+                    yin: '⚋',
+                    yang: '⚊'
+                },
+                YAO_DESCRIPTIONS: {
+                    6: '老阴 (变爻)',
+                    7: '少阳 (不变)',
+                    8: '少阴 (不变)',
+                    9: '老阳 (变爻)'
+                },
+                ERROR_MESSAGES: {
+                    EMPTY_BUSINESS: '请输入卜事',
+                    INVALID_YAO_INPUT: '第{index}爻输入格式错误：{input}。请输入三个字符，每个字符只能是2或3，例如：333, 222, 332, 322',
+                    MANUAL_INPUT_SUCCESS: '手动输入成功',
+                    AUTO_SHAKE_SUCCESS: '自动摇卦成功',
+                    SYSTEM_RESET: '系统已重置',
+                    NO_RESULTS_TO_EXPORT: '没有可导出的结果',
+                    NO_RESULTS_TO_COPY: '没有可复制的结果'
+                },
+                TOAST_TYPES: {
+                    SUCCESS: 'success',
+                    ERROR: 'error',
+                    WARNING: 'warning',
+                    INFO: 'info'
+                }
+            };
+            
+            this.initElements();
+            this.bindEvents();
+            this.renderManualInputs();
+        }
+
+        initElements() {
+            // 缓存所有常用DOM元素
+            this.cacheElements();
+            
+            // 确保结果标题元素存在
+            this.ensureResultsElementsExist();
+        }
+
+        cacheElements() {
+            // 输入相关元素
+            this.elements.businessInput = document.getElementById('business');
+            this.elements.methodAutoBtn = document.getElementById('method-auto');
+            this.elements.methodManualBtn = document.getElementById('method-manual');
+            this.elements.manualPanel = document.getElementById('manual-panel');
+            this.elements.yaoInputsContainer = document.querySelector('.yao-inputs');
+            this.elements.calculateBtn = document.getElementById('calculate-btn');
+            this.elements.actionButtons = document.getElementById('action-buttons');
+            
+            // 结果相关元素
+            this.elements.resultsSection = document.querySelector('.results-section');
+            this.elements.resultTitle = document.getElementById('result-title');
+            this.elements.resultTime = document.getElementById('result-time');
+            this.elements.resultBusiness = document.getElementById('result-business');
+            this.elements.sixYaoContainer = document.getElementById('six-yao-container');
+            this.elements.tabButtons = document.querySelectorAll('.tab-btn');
+            this.elements.tabContent = document.querySelector('.tab-content');
+            this.elements.jsonOutput = document.getElementById('json-output');
+            this.elements.exportBtn = document.getElementById('export-btn');
+            this.elements.copyBtn = document.getElementById('copy-btn');
+            
+            // 易经故事模态框元素
+            this.elements.yijingStoryBtn = document.getElementById('yijing-story-btn');
+            this.elements.yijingStoryModal = document.getElementById('yijing-story-modal');
+            this.elements.yijingStoryCloseBtn = document.getElementById('yijing-story-close');
+            
+            // 为方便访问，将常用元素直接挂载到实例
+            this.businessInput = this.elements.businessInput;
+            this.methodAutoBtn = this.elements.methodAutoBtn;
+            this.methodManualBtn = this.elements.methodManualBtn;
+            this.manualPanel = this.elements.manualPanel;
+            this.yaoInputsContainer = this.elements.yaoInputsContainer;
+            this.calculateBtn = this.elements.calculateBtn;
+            this.actionButtons = this.elements.actionButtons;
+
+            // 当前方式：默认自动
+            this.selectedMethod = 'auto';
+            this.resultsSection = this.elements.resultsSection;
+            this.resultTitle = this.elements.resultTitle;
+            this.resultTime = this.elements.resultTime;
+            this.resultBusiness = this.elements.resultBusiness;
+            this.sixYaoContainer = this.elements.sixYaoContainer;
+            this.tabButtons = this.elements.tabButtons;
+            this.tabContent = this.elements.tabContent;
+            this.jsonOutput = this.elements.jsonOutput;
+            this.exportBtn = this.elements.exportBtn;
+            this.copyBtn = this.elements.copyBtn;
+            this.yijingStoryBtn = this.elements.yijingStoryBtn;
+            this.yijingStoryModal = this.elements.yijingStoryModal;
+            this.yijingStoryCloseBtn = this.elements.yijingStoryCloseBtn;
+        }
+
+        ensureResultsElementsExist() {
+            if (!this.elements.resultTitle && this.elements.resultsSection) {
+                const resultsHeader = document.createElement('div');
+                resultsHeader.className = 'results-header';
+                resultsHeader.innerHTML = `
+                    <h2 id="result-title">起卦完成</h2>
+                    <div id="result-time"></div>
+                    <div id="result-business"></div>
+                `;
+                this.elements.resultsSection.insertBefore(resultsHeader, this.elements.resultsSection.firstChild);
+                
+                // 更新缓存
+                this.elements.resultTitle = document.getElementById('result-title');
+                this.elements.resultTime = document.getElementById('result-time');
+                this.elements.resultBusiness = document.getElementById('result-business');
+                
+                // 同步到实例属性
+                this.resultTitle = this.elements.resultTitle;
+                this.resultTime = this.elements.resultTime;
+                this.resultBusiness = this.elements.resultBusiness;
+            }
+        }
+
+        bindEvents() {
+            // 起卦方式切换：按钮（自动/手动）
+            if (this.elements.methodAutoBtn) {
+                this.elements.methodAutoBtn.addEventListener('click', () => {
+                    // 自动：若卜事为空，先提示并聚焦卜事
+                    const business = (this.elements.businessInput ? this.elements.businessInput.value : '').trim();
+                    if (!business) {
+                        this.showToast('请先输入卜事', 'warning');
+                        setTimeout(() => {
+                            if (this.elements.businessInput) this.elements.businessInput.focus();
+                        }, 0);
+                        return;
+                    }
+
+                    this.selectMethod('auto');
+
+                    // 点击自动后：展示“起卦”按钮区域
+                    if (this.elements.actionButtons) {
+                        this.elements.actionButtons.style.display = 'flex';
+                    }
+
+                    // 自动：也展示六爻输入框/预览
+                    if (this.elements.manualPanel) {
+                        this.elements.manualPanel.style.display = 'block';
+                    }
+
+                    // 自动：生成六爻并填充到下方6个输入框
+                    const sixYao = SixYao.autoSixYao();
+                    const inputs = sixYao.map(item => item[0].join('')); // 初爻->上爻
+                    this.fillSixYaoInputs(inputs);
+
+                    // 直接起卦（无需再点“起卦”按钮）
+                    this.calculate();
+                });
+            }
+
+            if (this.elements.methodManualBtn) {
+                this.elements.methodManualBtn.addEventListener('click', () => {
+                    // 切到手动：清空历史起卦内容（六爻输入/预览 + 结果区）
+                    for (let i = 1; i <= 6; i++) {
+                        const input = document.getElementById(`yao${i}`);
+                        if (input) {
+                            input.value = '';
+                            input.classList.remove('error');
+                            this.updateYaoPreview(`yao${i}`, '');
+                        }
+                    }
+                    this.currentResults = null;
+                    if (this.elements.resultsSection) {
+                        this.elements.resultsSection.style.display = 'none';
+                    }
+                    if (this.elements.tabContent) {
+                        this.elements.tabContent.innerHTML = '';
+                    }
+                    if (this.elements.jsonOutput) {
+                        this.elements.jsonOutput.textContent = '';
+                    }
+
+                    this.selectMethod('manual');
+
+                    // 点击手动后：展示“起卦”按钮区域
+                    if (this.elements.actionButtons) {
+                        this.elements.actionButtons.style.display = 'flex';
+                    }
+
+                    // 手动：若卜事为空，先提示并聚焦卜事；否则聚焦初爻
+                    const business = (this.elements.businessInput ? this.elements.businessInput.value : '').trim();
+                    if (!business) {
+                        this.showToast('请先输入卜事', 'warning');
+                        setTimeout(() => {
+                            if (this.elements.businessInput) this.elements.businessInput.focus();
+                        }, 0);
+                    } else {
+                        setTimeout(() => {
+                            const first = document.getElementById('yao1');
+                            if (first) first.focus();
+                        }, 0);
+                    }
+                });
+            }
+
+            // 手动输入验证 + 自动跳转
+            if (this.elements.yaoInputsContainer) {
+                this.elements.yaoInputsContainer.addEventListener('input', (e) => {
+                    if (e.target.tagName === 'INPUT') {
+                        this.validateYaoInput(e.target);
+
+                        // 输入满3位后，自动进入下一爻：初->二->三->四->五->上
+                        if (e.target.value.length === 3 && /^[23]{3}$/.test(e.target.value)) {
+                            const match = e.target.id && e.target.id.match(/^yao(\d)$/);
+                            if (match) {
+                                const cur = Number(match[1]);
+                                const next = cur + 1;
+                                if (next <= 6) {
+                                    const nextEl = document.getElementById(`yao${next}`);
+                                    if (nextEl) {
+                                        nextEl.focus();
+                                        nextEl.select();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // 手动点击容器区域时，也优先聚焦初爻（用户体验更顺）
+                this.elements.yaoInputsContainer.addEventListener('click', (e) => {
+                    if (e.target === this.elements.yaoInputsContainer) {
+                        const first = document.getElementById('yao1');
+                        if (first) first.focus();
+                    }
+                });
+            }
+
+            // 计算按钮
+            if (this.elements.calculateBtn) {
+                this.elements.calculateBtn.addEventListener('click', () => {
+                    this.calculate();
+                });
+            }
+
+
+
+            // 标签页切换 - 使用事件委托
+            if (this.elements.tabButtons && this.elements.tabButtons.length > 0) {
+                const tabContainer = this.elements.tabButtons[0].closest('.tab-buttons') || document;
+                tabContainer.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('tab-btn')) {
+                        this.switchTab(e.target.dataset.tab);
+                    }
+                });
+            }
+
+            // 导出JSON按钮
+            if (this.elements.exportBtn) {
+                this.elements.exportBtn.addEventListener('click', () => {
+                    this.exportJSON();
+                });
+            }
+
+            // 复制按钮
+            if (this.elements.copyBtn) {
+                this.elements.copyBtn.addEventListener('click', () => {
+                    this.copyResults();
+                });
+            }
+
+            // 易经故事按钮
+            if (this.elements.yijingStoryBtn) {
+                this.elements.yijingStoryBtn.addEventListener('click', () => {
+                    this.showYijingStoryModal();
+                });
+            }
+
+            // 易经故事模态框关闭按钮
+            if (this.elements.yijingStoryCloseBtn) {
+                this.elements.yijingStoryCloseBtn.addEventListener('click', () => {
+                    this.hideYijingStoryModal();
+                });
+            }
+
+            // 点击模态框背景关闭
+            if (this.elements.yijingStoryModal) {
+                this.elements.yijingStoryModal.addEventListener('click', (e) => {
+                    if (e.target === this.elements.yijingStoryModal) {
+                        this.hideYijingStoryModal();
+                    }
+                });
+            }
+        }
+
+        renderManualInputs() {
+            // 爻位顺序：拆分为左右两大块
+            // 左侧块：上爻、五爻、四爻；右侧块：三爻、二爻、初爻
+            let html = '';
+
+            html += `
+                <div class="yao-inputs-col">
+                    <div class="yao-col-title">上卦</div>
+                    <!-- 左侧块：上爻、五爻、四爻 -->
+                    <div class="yao-input">
+                        <div class="yao-input-main">
+                            <div class="yao-label-container">
+                                <label for="yao6">上爻</label>
+                                <span class="hint-text"></span>
+                            </div>
+                            <input type="text" id="yao6" 
+                                   placeholder="" 
+                                   maxlength="3" 
+                                   title="请输入三个字符，只能是2或3" 
+                                   pattern="[23]{3}">
+                        </div>
+                        <div class="yao-preview" id="yao6-preview">
+                            <div class="yao-preview-empty">输入3位(2/3)后显示</div>
+                        </div>
+                    </div>
+                    <div class="yao-input">
+                        <div class="yao-input-main">
+                            <div class="yao-label-container">
+                                <label for="yao5">五爻</label>
+                                <span class="hint-text"></span>
+                            </div>
+                            <input type="text" id="yao5" 
+                                   placeholder="" 
+                                   maxlength="3" 
+                                   title="请输入三个字符，只能是2或3" 
+                                   pattern="[23]{3}">
+                        </div>
+                        <div class="yao-preview" id="yao5-preview">
+                            <div class="yao-preview-empty">输入3位(2/3)后显示</div>
+                        </div>
+                    </div>
+                    <div class="yao-input">
+                        <div class="yao-input-main">
+                            <div class="yao-label-container">
+                                <label for="yao4">四爻</label>
+                                <span class="hint-text"></span>
+                            </div>
+                            <input type="text" id="yao4" 
+                                   placeholder="" 
+                                   maxlength="3" 
+                                   title="请输入三个字符，只能是2或3" 
+                                   pattern="[23]{3}">
+                        </div>
+                        <div class="yao-preview" id="yao4-preview">
+                            <div class="yao-preview-empty">输入3位(2/3)后显示</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="yao-inputs-col">
+                    <div class="yao-col-title">下卦</div>
+                    <!-- 右侧块：三爻、二爻、初爻 -->
+                    <div class="yao-input">
+                        <div class="yao-input-main">
+                            <div class="yao-label-container">
+                                <label for="yao3">三爻</label>
+                                <span class="hint-text"></span>
+                            </div>
+                            <input type="text" id="yao3" 
+                                   placeholder="" 
+                                   maxlength="3" 
+                                   title="请输入三个字符，只能是2或3" 
+                                   pattern="[23]{3}">
+                        </div>
+                        <div class="yao-preview" id="yao3-preview">
+                            <div class="yao-preview-empty">输入3位(2/3)后显示</div>
+                        </div>
+                    </div>
+                    <div class="yao-input">
+                        <div class="yao-input-main">
+                            <div class="yao-label-container">
+                                <label for="yao2">二爻</label>
+                                <span class="hint-text"></span>
+                            </div>
+                            <input type="text" id="yao2" 
+                                   placeholder="" 
+                                   maxlength="3" 
+                                   title="请输入三个字符，只能是2或3" 
+                                   pattern="[23]{3}">
+                        </div>
+                        <div class="yao-preview" id="yao2-preview">
+                            <div class="yao-preview-empty">输入3位(2/3)后显示</div>
+                        </div>
+                    </div>
+                    <div class="yao-input">
+                        <div class="yao-input-main">
+                            <div class="yao-label-container">
+                                <label for="yao1">初爻</label>
+                                <span class="hint-text"></span>
+                            </div>
+                            <input type="text" id="yao1" 
+                                   placeholder="" 
+                                   maxlength="3" 
+                                   title="请输入三个字符，只能是2或3" 
+                                   pattern="[23]{3}">
+                        </div>
+                        <div class="yao-preview" id="yao1-preview">
+                            <div class="yao-preview-empty">输入3位(2/3)后显示</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            this.yaoInputsContainer.innerHTML = html;
+        }
+
+        validateYaoInput(input) {
+            const value = input.value;
+            if (value.length === 0) {
+                input.classList.remove('error');
+                this.updateYaoPreview(input.id, '');
+                return;
+            }
+
+            if (!/^[23]*$/.test(value)) {
+                input.value = value.replace(/[^23]/g, '');
+                input.classList.add('error');
+                this.showToast('只能输入数字2或3', 'error');
+                this.updateYaoPreview(input.id, '');
+                return;
+            }
+
+            if (value.length > 3) {
+                input.value = value.substring(0, 3);
+            }
+
+            if (value.length === 3 && !/^[23]{3}$/.test(value)) {
+                input.classList.add('error');
+                this.showToast('请输入三个字符，如：333, 222, 332, 322', 'error');
+                this.updateYaoPreview(input.id, '');
+            } else {
+                input.classList.remove('error');
+
+                // 满3位时，更新右侧预览（图二信息融入图一）
+                if (input.value.length === 3 && /^[23]{3}$/.test(input.value)) {
+                    this.updateYaoPreview(input.id, input.value);
+                } else {
+                    this.updateYaoPreview(input.id, '');
+                }
+            }
+        }
+
+        updateYaoPreview(inputId, value) {
+            if (!inputId) return;
+            const match = inputId.match(/^yao(\d)$/);
+            if (!match) return;
+
+            const index = Number(match[1]);
+            const preview = document.getElementById(`yao${index}-preview`);
+            if (!preview) return;
+
+            if (!value || !/^[23]{3}$/.test(value)) {
+                preview.innerHTML = `<div class="yao-preview-empty">输入3位(2/3)后显示</div>`;
+                return;
+            }
+
+            const nums = value.split('').map(n => Number(n));
+            const total = nums.reduce((s, n) => s + n, 0);
+            const isYin = total % 2 === 0;
+            const symbol = isYin ? this.constants.YAO_SYMBOLS.yin : this.constants.YAO_SYMBOLS.yang;
+
+            const desc = this.constants.YAO_DESCRIPTIONS[total] || '未知';
+
+            // 显示“上六/九二”等（使用已有字典）
+            const yaoName = (window.Symbols && window.Symbols.YAO_YINYANG_POSITION_NAMES)
+                ? window.Symbols.YAO_YINYANG_POSITION_NAMES[isYin ? 0 : 1][index]
+                : this.constants.YAO_POSITIONS[index - 1];
+
+            preview.innerHTML = `
+                <div class="yao-preview-title">
+                    <span>${yaoName}</span>
+                    <span class="yao-preview-symbol">${symbol}</span>
+                </div>
+                <div class="yao-preview-desc">${total} | ${desc}</div>
+            `;
+        }
+
+        selectMethod(method) {
+            this.selectedMethod = method === 'manual' ? 'manual' : 'auto';
+
+            if (this.elements.methodAutoBtn) {
+                this.elements.methodAutoBtn.classList.toggle('active', this.selectedMethod === 'auto');
+            }
+            if (this.elements.methodManualBtn) {
+                this.elements.methodManualBtn.classList.toggle('active', this.selectedMethod === 'manual');
+            }
+
+            if (this.elements.manualPanel) {
+                this.elements.manualPanel.style.display = this.selectedMethod === 'manual' ? 'block' : 'none';
+            }
+        }
+
+        fillSixYaoInputs(inputs) {
+            // inputs: length=6，顺序为 初爻(yao1) -> 上爻(yao6)
+            for (let i = 1; i <= 6; i++) {
+                const el = document.getElementById(`yao${i}`);
+                if (!el) continue;
+                const v = inputs[i - 1] || '';
+                el.value = v;
+                el.classList.remove('error');
+                this.updateYaoPreview(`yao${i}`, v);
+            }
+
+            // 自动填充后：保持在自动模式，不强制聚焦；用户若切到手动再聚焦初爻
+        }
+
+        getSelectedMethod() {
+            return this.selectedMethod || 'auto';
+        }
+
+        getYaoInputs() {
+            const inputs = [];
+            for (let i = 1; i <= 6; i++) {
+                const input = document.getElementById(`yao${i}`);
+                inputs.push(input ? input.value : '');
+            }
+            return inputs;
+        }
+
+        validateManualInputs() {
+            const inputs = this.getYaoInputs();
+            const errors = [];
+
+            for (let i = 0; i < inputs.length; i++) {
+                const input = inputs[i];
+                if (!input) {
+                    errors.push(`第${i+1}爻不能为空`);
+                } else if (!/^[23]{3}$/.test(input)) {
+                    errors.push(`第${i+1}爻输入格式错误：${input}。请输入三个字符，每个字符只能是2或3，例如：333, 222, 332, 322`);
+                }
+            }
+
+            return errors;
+        }
+
+        calculate() {
+            // 验证输入
+            const business = this.elements.businessInput ? this.elements.businessInput.value.trim() : '';
+            if (!business) {
+                this.showToast(this.constants.ERROR_MESSAGES.EMPTY_BUSINESS, this.constants.TOAST_TYPES.WARNING);
+                return;
+            }
+
+            const method = this.getSelectedMethod();
+            let sixYao;
+
+            try {
+                if (method === 'manual') {
+                    const errors = this.validateManualInputs();
+                    if (errors.length > 0) {
+                        errors.forEach(error => this.showToast(error, 'error'));
+                        return;
+                    }
+
+                    const inputs = this.getYaoInputs();
+                    sixYao = SixYao.parseSixYao(inputs);
+                    this.showToast('手动输入成功', 'success');
+                } else {
+                    // 自动：优先使用已自动填充在输入框中的六爻；若尚未生成，则现场生成并填充
+                    let inputs = this.getYaoInputs();
+                    const hasAny = inputs.some(v => (v || '').trim().length > 0);
+                    if (!hasAny) {
+                        const auto = SixYao.autoSixYao();
+                        inputs = auto.map(item => item[0].join(''));
+                        this.fillSixYaoInputs(inputs);
+                    }
+
+                    const errors = this.validateManualInputs();
+                    if (errors.length > 0) {
+                        errors.forEach(error => this.showToast(error, 'error'));
+                        return;
+                    }
+
+                    sixYao = SixYao.parseSixYao(inputs);
+                    this.showToast('自动摇卦成功', 'success');
+                }
+            } catch (error) {
+                this.showToast(`计算错误：${error.message}`, 'error');
+                return;
+            }
+
+            // 执行卦象计算
+            try {
+                const results = Calculator.run(sixYao);
+                this.currentResults = {
+                    timestamp: new Date().toLocaleString('zh-CN'),
+                    business: business,
+                    sixYao: sixYao,
+                    results: results
+                };
+
+                this.displayResults();
+                this.resultsSection.style.display = 'block';
+                window.scrollTo({ top: this.resultsSection.offsetTop - 100, behavior: 'smooth' });
+            } catch (error) {
+                this.showToast(`卦象计算错误：${error.message}`, 'error');
+            }
+        }
+
+        displayResults() {
+            if (!this.currentResults) return;
+
+            const { timestamp, business, sixYao, results } = this.currentResults;
+
+            // 确保DOM元素存在，如果不存在则创建
+            this.ensureResultsElementsExist();
+
+            // 更新标题和时间 - 只显示基本标题，其他留空
+            if (this.resultTitle) {
+                this.resultTitle.textContent = "起卦完成";
+            }
+            if (this.resultTime) {
+                this.resultTime.textContent = "";
+            }
+            if (this.resultBusiness) {
+                this.resultBusiness.textContent = "";
+            }
+
+            // 显示六爻
+            this.renderSixYao(sixYao);
+
+            // 设置标签页内容
+            this.renderTabContent(results);
+
+            // 显示JSON - 新的格式：起卦和卜事在JSON结构体之外，每行后多空一行
+            const textStr = `起卦：${timestamp}
+
+卜事：${business}
+
+${JSON.stringify(results, null, 2)}`;
+            if (this.jsonOutput) {
+                this.jsonOutput.textContent = textStr;
+            }
+        }
+
+
+
+        renderSixYao(sixYao) {
+            const parsedSixYao = SixYao.parseSixYaoInfo(sixYao);
+            let html = '';
+
+            parsedSixYao.forEach((yaoStr, index) => {
+                const yaoData = sixYao[5 - index]; // 反转顺序
+                const yaoNumbers = yaoData[0].join('');
+                const yaoTotal = yaoData[1];
+                const isYin = yaoTotal % 2 === 0;
+                const yaoSymbol = isYin ? this.constants.YAO_SYMBOLS.yin : this.constants.YAO_SYMBOLS.yang;
+                const yaoName = yaoStr.split(' ')[0];
+                const yaoPosition = this.constants.YAO_POSITIONS[5 - index]; // 反转顺序
+                const yaoDescription = this.constants.YAO_DESCRIPTIONS[yaoTotal] || '未知';
+                
+                html += `
+                    <div class="yao-item">
+                        <div class="yao-position">${yaoPosition}</div>
+                        <div class="yao-symbol">${yaoSymbol}</div>
+                        <div class="yao-desc">
+                            <strong>${yaoName}</strong> | ${yaoTotal} | ${yaoDescription}
+                        </div>
+                    </div>
+                `;
+            });
+
+            if (this.elements.sixYaoContainer) {
+                this.elements.sixYaoContainer.innerHTML = html;
+            }
+        }
+
+        renderTabContent(results) {
+            const tabs = {
+                original: {
+                    title: '本卦分析',
+                    data: results['本卦']
+                },
+                active: {
+                    title: '主变爻信息',
+                    data: results['主变']
+                },
+                change: {
+                    title: '变卦分析',
+                    data: results['变卦']
+                },
+                opposite: {
+                    title: '错卦分析',
+                    data: results['错卦']
+                },
+                reverse: {
+                    title: '综卦分析',
+                    data: results['综卦']
+                },
+                mutual: {
+                    title: '互卦分析',
+                    data: results['互卦']
+                },
+                swap: {
+                    title: '杂卦分析',
+                    data: results['杂卦']
+                }
+            };
+
+            // 默认显示本卦
+            this.switchTab('original');
+        }
+
+        switchTab(tabName) {
+            // 更新按钮状态
+            this.tabButtons.forEach(button => {
+                button.classList.toggle('active', button.dataset.tab === tabName);
+            });
+
+            // 获取当前标签页数据
+            const tabData = this.getTabData(tabName);
+            if (!tabData) return;
+
+            // 渲染标签页内容
+            let html = `<h3>${tabData.title}</h3>`;
+            
+            if (tabData.data) {
+                Object.entries(tabData.data).forEach(([key, value]) => {
+                    html += `
+                        <div class="diagram-item">
+                            <div class="diagram-label">${key}</div>
+                            <div class="diagram-value">${value}</div>
+                        </div>
+                    `;
+                });
+            }
+
+            this.tabContent.innerHTML = html;
+        }
+
+        getTabData(tabName) {
+            if (!this.currentResults || !this.currentResults.results) {
+                return null;
+            }
+
+            const results = this.currentResults.results;
+            const tabs = {
+                original: {
+                    title: '本卦分析',
+                    data: results['本卦']
+                },
+                active: {
+                    title: '主变爻信息',
+                    data: results['主变']
+                },
+                change: {
+                    title: '变卦分析',
+                    data: results['变卦']
+                },
+                opposite: {
+                    title: '错卦分析',
+                    data: results['错卦']
+                },
+                reverse: {
+                    title: '综卦分析',
+                    data: results['综卦']
+                },
+                mutual: {
+                    title: '互卦分析',
+                    data: results['互卦']
+                },
+                swap: {
+                    title: '杂卦分析',
+                    data: results['杂卦']
+                }
+            };
+
+            return tabs[tabName] || tabs.original;
+        }
+
+        reset() {
+            // 重置输入
+            this.businessInput.value = '';
+            this.selectMethod('auto');
+            
+            // 重置爻位输入
+            for (let i = 1; i <= 6; i++) {
+                const input = document.getElementById(`yao${i}`);
+                if (input) {
+                    input.value = '';
+                    input.classList.remove('error');
+                    this.updateYaoPreview(`yao${i}`, '');
+                }
+            }
+
+            // 隐藏结果区域
+            this.resultsSection.style.display = 'none';
+            this.currentResults = null;
+            
+            this.showToast('系统已重置', 'success');
+        }
+
+        exportJSON() {
+            if (!this.currentResults) {
+                this.showToast('没有可导出的结果', 'warning');
+                return;
+            }
+
+            // 新的格式：起卦和卜事在JSON结构体之外，每行后多空一行
+            const dataStr = `起卦：${this.currentResults.timestamp}
+
+卜事：${this.currentResults.business}
+
+${JSON.stringify(this.currentResults.results, null, 2)}`;
+
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `易经卦象结果_${new Date().toISOString().slice(0,10)}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            
+            this.showToast('结果文件已下载', 'success');
+        }
+
+        copyResults() {
+            if (!this.currentResults) {
+                this.showToast('没有可复制的结果', 'warning');
+                return;
+            }
+
+            // 新的格式：起卦和卜事在JSON结构体之外，每行后多空一行
+            const textStr = `起卦：${this.currentResults.timestamp}
+
+卜事：${this.currentResults.business}
+
+${JSON.stringify(this.currentResults.results, null, 2)}`;
+
+            navigator.clipboard.writeText(textStr).then(() => {
+                this.showToast('结果已复制到剪贴板', 'success');
+            }).catch(err => {
+                console.error('复制失败:', err);
+                this.showToast('复制失败，请手动复制结果区域内容', 'error');
+            });
+        }
+
+        showToast(message, type = 'info') {
+            // 移除已有的toast
+            const existingToast = document.querySelector('.toast');
+            if (existingToast) {
+                existingToast.remove();
+            }
+
+            // 创建新的toast
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.textContent = message;
+
+            document.body.appendChild(toast);
+
+            // 3秒后自动移除
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(-50%) translateY(-10px)';
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 250);
+            }, 3000);
+        }
+
+        // 易经故事模态框功能
+        showYijingStoryModal() {
+            const modal = document.getElementById('yijing-story-modal');
+            if (!modal) return;
+
+            // 显示模态框
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.style.opacity = '1';
+            }, 10);
+            document.body.style.overflow = 'hidden';
+
+            // 加载故事内容
+            this.loadYijingStoryContent();
+        }
+
+        hideYijingStoryModal() {
+            const modal = document.getElementById('yijing-story-modal');
+            if (!modal) return;
+
+            modal.style.opacity = '0';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+            document.body.style.overflow = 'auto';
+        }
+
+        loadYijingStoryContent() {
+            const storyContentElement = document.querySelector('.yijing-story-content');
+            if (!storyContentElement) return;
+
+            // 从bookofchanges.py的DOCS提取内容
+            const yijingDocs = `
+<h3>河图洛书</h3>
+<p>河图有10个数，1-10，阴阳相交，中心为5。其数字总和为55，河图东南西北中五方各两个数相差5。</p>
+<p>洛书有9个数，1-9，阴阳相交，中心为5。纵横斜各条线上三个数之和均为15，其数字总和为45与河图总和相差10。</p>
+
+<h3>天地之数</h3>
+<p>阳数，天数：1、3、5、7、9，之和为25。</p>
+<p>阴数，地数：2、4、6、8、10，之和为30。</p>
+<p>天地之数，阴阳相交，其数字总和为55，加上五行的5，共60。</p>
+
+<h3>五行之数</h3>
+<p>阳数：1，3，5，之和为9。</p>
+<p>阴数：2，4，之和为6。</p>
+
+<h3>历法演进</h3>
+<p>现代考古推测上古夏朝：有些部落是一年十个“月”的日历（太阳历），基于圆周数360，每“月”36日，与365.2422日相差5.2422日，长期使用不能吻合节气，无法准确指导农耕和计算年龄。</p>
+<p>现代学术推测上古神话：女娲用五色石补天，补的是欠缺的五天，360天十个月，五天用来过年和祭祀，共365天，但仍然有0.2422天的误差。</p>
+<p>现代学术推测上古神话：颛顼帝为整顿民神杂糅不可方物，下令“绝地天通”：断绝民间与上天的直接沟通，将 “观象授时”（观测天文、制定历法）的权力收归王室，由专职巫祝负责。</p>
+<p>现代学术推测上古神话：羲和浴日，十日一周，得十天干；常羲浴月，十二月一岁，得十二地支；常羲与羲和同为帝俊之妻，天干地支而后形成六十甲子纪时体系（纪年、纪月、纪日、纪时）。</p>
+<p>现代学术推测上古神话：夸父追日，是立杆追日影，确立冬至夏至，逐渐产生二十四节气。</p>
+<p>现代学术推测上古神话：后裔射日，十日射九日是指消灭不同历法，统一历法。</p>
+<p>现代现行公历闰年规则：公历闰年是补日差，平年365天，闰年366天，四年一闰，百年不闰，四百年再闰。</p>
+<p>现代现行农历闰月规则：农历也称阴阳历，结合了日月周期，农历闰月是补月差，19年设置7个闰月，弥补农历年（约354天）与太阳回归年（约365.24天）的天数差。</p>
+<p>每个农历月以 “朔日”（月球位于太阳和地球之间，肉眼看不到月亮）为初一。</p>
+<p>闰月放在不含 “中气”（二十四节气中双数的节气，如雨水、春分）的月份之后，该月重复上一个月的名称（如闰四月）。</p>
+<p>二十四节气是农历的阳历成分，由太阳黄经位置确定，与月相无关。</p>
+<p>我们的农历，是阴阳历，是结合了太阳，月亮、地球运行规律的三维的星历。视觉上北斗七星绕北极星旋转的规律，从而定义了二十四宿，进一步完善了天体坐标体系。</p>
+
+<h3>八卦易经（河图洛书、八卦，符号先出现，后人著易经）</h3>
+<p>易经之始为伏羲所创先天八卦，后人称之为乾坤易，后有连山易和归藏易以及梅花易，相传由人类迁徙导致命名不同，是易经不同时期的名称。</p>
+<p>后天八卦由西周的周文王改造伏羲先天八卦而来（先天八卦主要表达地球时间，后天八卦纳入了地球空间与人文），代表着文明发生了巨大变化。</p>
+<p>先天八卦时期是禅位制，后天八卦时期是世袭封建制。</p>
+
+<h3>易经文化</h3>
+<p>易经是华人的人文之祖，我们的汉字和一些词汇均可追溯至易经。</p>
+<p>易经是为人处事之道，教化人们用发展的规律和不同的角度去思维。</p>
+<p>易经的核心是忧患意识，将忧患思维梳理清晰，避免毫无头绪的无效思维。</p>
+<p>遇事不决，则可以卜卦，通过卜卦来学习易经的思维，可厘清思维，化解无效的思维。</p>
+<p>综上，八八六十四卦实际就是抽象的索引和字典，偶尔查查字典非常利于教化自身。</p>
+
+<h3>金钱卦</h3>
+<p>金钱卦常用乾隆通宝(民间认为乾隆在位超60年，流通人气足)，或现代人民币，字为阳为数字[3]，花或背面为阴为数字[2]。</p>
+<p>金钱卦每爻由三个数字组成，共四种组合：三个阳[333]，三个阴[222]，两阳一阴[332]，两阴一阳[322]。</p>
+<p>金钱卦如阴阳难定，则重点参考错卦(又称对卦)，错卦刚好是阴阳爻对立的卦。</p>
+`;
+
+            // 将内容设置到元素中
+            storyContentElement.innerHTML = yijingDocs;
+        }
+    }
+
+    // 等待DOM加载完成后初始化
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            new BookOfChangesUI();
+        });
+    } else {
+        new BookOfChangesUI();
+    }
+    </script>
+</body>
+</html>
