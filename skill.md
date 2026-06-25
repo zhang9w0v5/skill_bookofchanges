@@ -1,6 +1,14 @@
+---
+name: bookofchanges
+description: "通过金钱卦（六爻）起卦，输出本卦、变卦、错卦、综卦、互卦、杂卦结果。"
+version: "20260625.1700"
+tags: [divination, yijing, book-of-changes]
+---
+
 # 易经卜卦（Book of Changes）
 
 ## 概述
+
 通过金钱卦（六爻）起卦，输出本卦、变卦、错卦、综卦、互卦、杂卦结果。
 
 ## 用法
@@ -18,6 +26,7 @@ python3 bookofchanges.py
 输入卜卦之事后，可选择自动起卦或手动摇掷三枚硬币（每爻掷三次，共六爻）。
 
 ## 输出
+
 终端打印起卦时间、卜事、卦象 JSON，同时 `output` 子目录生成 `{YYYYMMDD_HHMMSS}_results.md`。
 
 ## JSON 结构
@@ -33,3 +42,4 @@ python3 bookofchanges.py
   "杂卦": { ... }
 }
 ```
+
