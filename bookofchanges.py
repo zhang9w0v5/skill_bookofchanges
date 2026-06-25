@@ -3,6 +3,7 @@
 # 2023/03    zhang9w0v5    created
 # 2024/04    zhang9w0v5    fix bugs
 # 2025/08    zhang9w0v5    尝试基于AI优化
+# 2026/06    zhang9w0v5    skill化便于agent调用
 # -*- -*- -*- -*- -*- -*-
 
 DOCS = """
@@ -59,9 +60,11 @@ DOCS = """
 
 import os
 import re
+import sys
 import time
 import random
 import json
+from datetime import datetime
 
 # -*- -*- -*- -*- -*- -*-
 
@@ -415,22 +418,32 @@ class Calculator(object):
 
 if __name__ == "__main__":
     # -*- -*- -*- -*- -*- -*- -*- -*- -*-
-    printfn("-*- " * 25)
-    printfn(DOCS)
-    printfn("-*- " * 25)
-    # -*- -*- -*- -*- -*- -*- -*- -*- -*-
-    printfn()
-    printfn("卜卦之事:", end="")
-    business  = input()
-    timestamp = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
-    # -*- -*- -*- -*- -*- -*- -*- -*- -*-
-    printfn()
-    printfn("输入字母[y或Y]自动起卦，输入其他任意字符则需手动摇金钱卦。")
-    printfn("自动起卦: ", end="")
-    cmd = input()
-    printfn()
-    if cmd.lower() in ['y', 'yes'] : six_yao = SixYao.auto_six_yao() # 有打印输出
-    else                           : six_yao = SixYao.type_six_yao() # 有打印交互
+    if len(sys.argv) > 1:
+        business = " ".join(sys.argv[1:])
+        timestamp = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+        printfn()
+        printfn(f"卜卦之事: {business}")
+        printfn()
+        printfn("自动起卦中...")
+        printfn()
+        six_yao = SixYao.auto_six_yao()
+    else:
+        printfn("-*- " * 25)
+        printfn(DOCS)
+        printfn("-*- " * 25)
+        # -*- -*- -*- -*- -*- -*- -*- -*- -*-
+        printfn()
+        printfn("卜卦之事:", end="")
+        business  = input()
+        timestamp = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+        # -*- -*- -*- -*- -*- -*- -*- -*- -*-
+        printfn()
+        printfn("输入字母[y或Y]自动起卦，输入其他任意字符则需手动摇金钱卦。")
+        printfn("自动起卦: ", end="")
+        cmd = input()
+        printfn()
+        if cmd.lower() in ['y', 'yes'] : six_yao = SixYao.auto_six_yao() # 有打印输出
+        else                           : six_yao = SixYao.type_six_yao() # 有打印交互
     # -*- -*- -*- -*- -*- -*- -*- -*- -*-
     json_results={"六爻": SixYao.parse_six_yao(six_yao)}
     json_results.update(Calculator.run(six_yao))
@@ -446,6 +459,10 @@ if __name__ == "__main__":
     printfn(json_results_str)
     printfn()
     # -*- -*- -*- -*- -*- -*- -*- -*- -*-
-    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "last_results.json"), "w", encoding="utf-8") as f:
-        f.write(json_results_str)
+    output_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "output")
+    os.makedirs(output_dir, exist_ok=True)
+    output_json_path = os.path.join(output_dir, f"{timestamp.replace('-', '').replace(':', '').replace(' ', '_')}_results.md")
+    md_content = f"起卦: {timestamp}\n\n卜卦: {business}\n\n{json_results_str}\n"
+    with open(output_json_path, "w", encoding="utf-8") as f:
+        f.write(md_content)
     # -*- -*- -*- -*- -*- -*- -*- -*- -*-
