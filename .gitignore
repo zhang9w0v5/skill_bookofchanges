@@ -1,6 +1,7 @@
 # folder
 .DS_Store
 __pycache__
+git_analyzer_output
 output
 
 # files
